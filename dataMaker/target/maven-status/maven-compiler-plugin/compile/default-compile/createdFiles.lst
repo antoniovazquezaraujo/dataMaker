@@ -1,0 +1,6 @@
+datamaker\demo\DataMakerMiniIndependentDemo.class
+datamaker\annotations\SelfCollection.class
+datamaker\annotations\ExternalCollection.class
+datamaker\DataPrinter.class
+datamaker\demo\DataMakerMiniIndependentDemo$MyPerson.class
+datamaker\DataMaker.class
