@@ -8,6 +8,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * MultiField100
+ *
+ * Class with 100 fields. Only for stress tests.
+ *
+ * @author <a href="antoniovazquezaraujo@gmail.com">Antonio Vazquez Araujo</a>
+ *
+ */
 public class MultiField100 {
 
     public MultiField100() {

@@ -16,15 +16,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /*
- * Pruebas para poder mostrar en modo texto los datos con las colecciones anidadas.
- * No es simple, porque necesitas enviar el nombre de la colección a expandir, y si esa tiene más elementos anidados, debería poder enviarse también la colección a expandir de cada una, hasta el infinito. Cómo hacer eso?
- * De momento se queda como idea.
+ * Tests to be able to show in text mode the data with the nested collections.
+ * It is not simple, because you need to send the name of the collection to expand, and if that has more nested elements, it should be able to send the collection to expand from each one, to infinity. How to do that?
+ * At the moment it remains as an idea.
  */
 public class DataPrinter {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataMaker.class);
     public static final String COLUMN_SEPARATOR = "\t";
     public static final String ROW_SEPARATOR = "\n";
-
 
     public static String print(Class clazz, Collection col) {
         PropertyDescriptor[] propertyDescriptors = null;

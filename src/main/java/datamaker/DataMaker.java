@@ -2,10 +2,12 @@ package datamaker;
 
 /**
  * DataMaker.
- * Generador de datos.
- * Genera listas o árboles de datos con apariencia real.
- * Basado en la biblioteca Faker (http://dius.github.io/java-faker)
- * Autor: Antonio Vazquez Araujo
+ * Data generator.
+ * Generates lists or data trees with real appearance
+ * Based on Faker (http://dius.github.io/java-faker)
+ *
+ * @author <a href="antoniovazquezaraujo@gmail.com">Antonio Vazquez Araujo</a>
+ *
  */
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -29,15 +31,15 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
 public class DataMaker {
-    // tamaños min/max de las colecciones
+    // min/max sizes of collections
     protected int minSize = -1, maxSize = -1;
-    // profundidad min/max de los árboles
+    // min/max deep of tress
     protected int minDepth = -1, maxDepth = -1;
-    // semilla de entropía
+    // entropy seed
     protected Random random = new Random();
     // locale
     protected Locale locale = new Locale("es_ES");
-    // faker, el que proporciona los datos
+    // faker, the data generator
     protected static Faker faker = new Faker(new Locale("es_ES"), new Random());
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataMaker.class);
@@ -118,13 +120,13 @@ public class DataMaker {
         return this;
     }
 
-    // Crea un arbol de objetos de una clase T (versión tipada para comodidad)
+    // Create a tree of objects of a class T (typed version for convenience)
     @SuppressWarnings("unchecked")
     public <T> T make(Class<T> clazz) {
         return (T) makeObject(clazz);
     }
 
-    // Crea un arbol de objetos de cualquier clase
+    // Create a tree of objects of any class
     public Object makeObject(Class clazz) {
         Object ret = null;
         try {
@@ -146,13 +148,13 @@ public class DataMaker {
         return ret;
     }
 
-    // Crea un arbol de la clase dada, con TreeItems
+    // Create a tree of the given class, with TreeItems
     public <T> TreeItem<T> makeTree(Class<T> clazz) {
         Object object = make(clazz);
         return makeTree(object);
     }
 
-    // Convierte un arbol de objetos en un arbol de TreeItems
+    // Converts an object tree into a TreeItems tree
     public TreeItem makeTree(Object t) {
         TreeItem ret = new TreeItem(t);
         Class clazz = t.getClass();
@@ -172,7 +174,7 @@ public class DataMaker {
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | IntrospectionException e) {
-            LOGGER.error("Error obteniendo descriptor " + e);
+            LOGGER.error("Error obtaining descriptor " + e);
         }
         return ret;
     }
@@ -185,7 +187,7 @@ public class DataMaker {
         return makeObjectObservableList(clazz);
     }
 
-    // Zona privada
+    // Private zone
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private List makeObjectList(Class clazz) {
         List ret = new ArrayList();
@@ -206,9 +208,9 @@ public class DataMaker {
         return ret;
     }
 
-    // Calcula el tamaño de las colecciones.
-    // Primero mira los datos parámetro. Si no se han pasado busca los de las anotaciones
-    // Si tampoco hay anotaciones, el tamaño será -1 y no se crearán elementos
+    // Calculates the size of the collections.
+    // First look at the parameter data. If they have not been received, looks for those in the annotations
+    // If there are no annotations either, the size will be -1 and no elements will be created
     private int calculateSize() {
         return calculateSize(null);
     }
@@ -239,8 +241,8 @@ public class DataMaker {
         return -1;
     }
 
-    // Calcula la profundidad. Mira primero los parámetros. Si no hay mira las anotaciones.
-    // Si tampoco hay, la profundidad será -1, con lo que no se creará nada
+    // Depth is calculated. The parameters are looked at first. If there is not, then the annotations are looked at.
+    // If there is not either, the depth will be -1, so nothing will be created
     private int calculateDepth(Method method) {
         int min = this.minDepth;
         int max = this.maxDepth;
@@ -252,16 +254,16 @@ public class DataMaker {
             if (min == max) {
                 return min;
             }
-            // Usamos esto, porque creo que hay un fallo en numberBetween en faker
+            // We use this because there is a fail in numberBetween in Faker
             int range = (int) ((DataMaker.faker.number().randomNumber() % ((max - min) + 1)));
             return min + range;
         }
         return -1;
     }
 
-    // Llena de datos las colecciones de un objeto con una profundidad dada y el método que devuelve la colección
-    // Teóricamente solo llena la colección indicada, pero es recursivo y llena las que contenga cada elemento ad
-    // infinitum
+    // It fills with data the collections of an object with a given depth and the method that returns the collection
+    // Theoretically, it only fills the indicated collection, but it is recursive and also fills the ones contained in
+    // each element to infinity
     private Object fillCollections(Class clazz, Object object, int depth, Method method) {
         if (depth <= 0) {
             return object;
@@ -279,12 +281,12 @@ public class DataMaker {
                 Method collectionGetMethod = fieldValue.getClass().getMethod("add", Object.class);
                 for (int n = 0; n < size; n++) {
                     Object newObject = elementType.newInstance();
-                    fillCollections(elementType, newObject, depth-1, method);
+                    fillCollections(elementType, newObject, depth - 1, method);
                     collectionGetMethod.invoke(fieldValue, newObject);
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
                     | NoSuchMethodException | SecurityException | InstantiationException e) {
-                LOGGER.error("Error llenando colecciones " + e);
+                LOGGER.error("Error filling collections " + e);
             }
         }
         return object;
