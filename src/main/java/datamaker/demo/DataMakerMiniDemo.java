@@ -1,9 +1,10 @@
 package datamaker.demo;
 
+import java.lang.reflect.Method;
+
 import datamaker.DataMaker;
+import datamaker.demo.types.Person;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class DataMakerDemo1 extends Application {
+public class DataMakerMiniDemo extends Application {
     @Override
     public void start(final Stage primaryStage) {
         final GridPane grid = new GridPane();
@@ -30,16 +31,14 @@ public class DataMakerDemo1 extends Application {
         GridPane.setHalignment(textFieldLabel, HPos.CENTER);
         grid.add(textFieldLabel, 1, row++);
 
-        final TableView<MyPerson> table = new TableView<>();
-        TableColumn<MyPerson, String> col = new TableColumn<MyPerson, String>("First Name");
-        col.setCellValueFactory(new PropertyValueFactory("field1"));
-        table.getColumns().setAll(col);
+        final TableView<Person> table = new TableView<>();
+        populateColumns(table, Person.class);
 
         table.setItems((new DataMaker()
                 .setLocaleName("es_ES")
                 .setDepthOfSelfCollections(0)
                 .setSizeOfCollections(100)
-                .makeObservableList(MyPerson.class)
+                .makeObservableList(Person.class)
                 ));
 
         grid.add(table, 1, row++);
@@ -55,16 +54,16 @@ public class DataMakerDemo1 extends Application {
         launch(args);
     }
 
-    public static class MyPerson {
-        private StringProperty field1 = new SimpleStringProperty(DataMaker.faker().commerce().department());
-        public final StringProperty field1Property() {
-            return this.field1;
-        }
-        public final String getField1() {
-            return this.field1Property().get();
-        }
-        public final void setField1(final String field1) {
-            this.field1Property().set(field1);
+    private void populateColumns(TableView table, Class clazz) {
+        for (Method method : clazz.getMethods()) {
+            String name = method.getName();
+            if (name.endsWith("Property")) {
+                String propName = name.replace("Property", "");
+
+                TableColumn column = new TableColumn(propName);
+                column.setCellValueFactory(new PropertyValueFactory<>(propName));
+                table.getColumns().add(column);
+            }
         }
     }
 }
