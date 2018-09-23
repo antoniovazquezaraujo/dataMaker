@@ -16,7 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class DataMakerMiniIndependentDemo extends Application {
+public class DataMakerDemo1 extends Application {
     @Override
     public void start(final Stage primaryStage) {
         final GridPane grid = new GridPane();
