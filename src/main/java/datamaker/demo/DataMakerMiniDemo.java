@@ -3,7 +3,7 @@ package datamaker.demo;
 import java.lang.reflect.Method;
 
 import datamaker.DataMaker;
-import datamaker.demo.types.Person;
+import datamaker.demo.types.Programmer;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -31,14 +31,17 @@ public class DataMakerMiniDemo extends Application {
         GridPane.setHalignment(textFieldLabel, HPos.CENTER);
         grid.add(textFieldLabel, 1, row++);
 
-        final TableView<Person> table = new TableView<>();
-        populateColumns(table, Person.class);
+        final TableView<Programmer> table = new TableView<>();
+        populateColumns(table, Programmer.class);
+        table.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
+            System.out.println(c.toString());
+        });
 
         table.setItems((new DataMaker()
                 .setLocaleName("es_ES")
                 .setDepthOfSelfCollections(0)
                 .setSizeOfCollections(100)
-                .makeObservableList(Person.class)
+                .makeObservableList(Programmer.class)
                 ));
 
         grid.add(table, 1, row++);

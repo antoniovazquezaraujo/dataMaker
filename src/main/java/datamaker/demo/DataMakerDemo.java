@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import datamaker.DataMaker;
+import datamaker.JsonConverter;
 import datamaker.demo.types.Programmer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -40,6 +41,9 @@ public class DataMakerDemo extends Application {
         try {
             TableView<Programmer> table = new TableView<>();
             populateColumns(table, Programmer.class);
+            table.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
+                System.out.println(JsonConverter.toJson(c));
+            });
             box.getChildren().add(table);
             HBox tableHBox = new HBox();
             tableHBox.setSpacing(10);
@@ -99,6 +103,9 @@ public class DataMakerDemo extends Application {
             box.getChildren().add(tableHBox);
             TreeTableView<Programmer> treeTable = new TreeTableView<>();
             populateTreeColumns(treeTable, Programmer.class);
+            treeTable.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
+                System.out.println(c.toString());
+            });
 
             box.getChildren().add(treeTable);
 
@@ -170,7 +177,7 @@ public class DataMakerDemo extends Application {
 
                 long calcSize = calcSize(y, depth);
                 if (calcSize > 1000) {
-                    final Alert alert = new Alert(AlertType.WARNING);
+                    final Alert alert = new Alert(AlertType.CONFIRMATION);
                     alert.setTitle("Tree max. size");
                     alert.setContentText("Up to " + calcSize + " elements could be created. Continue?");
                     alert.show();

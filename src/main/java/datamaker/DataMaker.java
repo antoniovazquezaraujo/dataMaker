@@ -138,6 +138,7 @@ public class DataMaker {
                     int depth = calculateDepth(method);
                     if (depth != -1) {
                         fillCollections(clazz, ret, depth, method);
+                    } else {
                     }
                 }
             }
@@ -155,6 +156,7 @@ public class DataMaker {
     }
 
     // Converts an object tree into a TreeItems tree
+    // Convert any selfCollection into a treeItem children
     public TreeItem makeTree(Object t) {
         TreeItem ret = new TreeItem(t);
         Class clazz = t.getClass();
@@ -178,6 +180,8 @@ public class DataMaker {
         }
         return ret;
     }
+
+
 
     public <T> List<T> makeList(Class<T> clazz) {
         return makeObjectList(clazz);
@@ -234,7 +238,7 @@ public class DataMaker {
             if (min == max) {
                 return min;
             }
-            // Usamos esto, porque creo que hay un fallo en numberBetween en faker
+            // We use this because there is a fail in numberBetween in Faker
             int range = (int) ((DataMaker.faker.number().randomNumber() % ((max - min) + 1)));
             return min + range;
         }

@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Programmer extends Employee {
-    private static final int FIELD_ORDER = 400;
 
 
     private final StringProperty encryptedPassword = new SimpleStringProperty(faker().crypto().sha256());

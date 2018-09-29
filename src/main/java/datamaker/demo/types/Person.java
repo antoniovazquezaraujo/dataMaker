@@ -3,6 +3,7 @@ package datamaker.demo.types;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.github.javafaker.Faker;
 
 import datamaker.DataMaker;
@@ -31,16 +32,22 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person [children=" + this.children + ", id=" + this.id + ", firstName=" + this.firstName + ", lastName="
+        return "id=" + this.id + ", firstName=" + this.firstName + ", lastName="
                 + this.lastName + ", gender=" + this.gender + ", single=" + this.single + ", birthDate="
-                + this.birthDate + ", age=" + this.age + ", getChildren()=" + getChildren() + "]";
+                + this.birthDate + ", age=" + this.age + ", people=[" + getPeople() + "]";
     }
 
-    ObservableList<Person> children = FXCollections.observableArrayList();
+    @JsonBackReference
+    ObservableList<Person> people = FXCollections.observableArrayList();
 
-    @SelfCollection(minSize = 1, maxSize = 1, minDepth = 1, maxDepth = 1)
-    public ObservableList<Person> getChildren() {
-        return this.children;
+    @SelfCollection(minSize = 1, maxSize = 5, minDepth = 1, maxDepth = 2)
+    @JsonBackReference
+    public ObservableList<Person> getPeople() {
+        return this.people;
+    }
+
+    public void setPeople(ObservableList<Person> people) {
+        this.people = people;
     }
 
     static int sequentialNumber = 0;
